@@ -17,6 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -49,12 +52,40 @@ public class TodoService {
     }
 
     @Transactional(readOnly = true)
-    public Page<TodoResponse> getTodos(int page, int size) {
+    public Page<TodoResponse> getTodos(int page, int size, LocalDate startDate, LocalDate endDate, String weather) {
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<Todo> todos = todoRepository.findAllByOrderByModifiedAtDesc(pageable);
+       if (startDate != null && endDate != null) {
+           LocalDateTime startDateTime = startDate.atStartOfDay();
+           LocalDateTime endDateTime = endDate.plusDays(1).atStartOfDay();
+           return todoRepository.findAllByCreatedAtBetween(startDateTime, endDateTime, pageable)
+                   .map(todo -> new TodoResponse(
+                           todo.getId(),
+                           todo.getTitle(),
+                           todo.getContents(),
+                           todo.getWeather(),
+                           new UserResponse(todo.getUser().getId(), todo.getUser().getEmail()),
+                           todo.getCreatedAt(),
+                           todo.getModifiedAt()
+                   ));
+       }
 
-        return todos.map(todo -> new TodoResponse(
+       // 날씨 조건만 주어진 경우
+       if (weather != null) {
+           return todoRepository.findTodoByWeather(weather, pageable)
+                   .map(todo -> new TodoResponse(
+                           todo.getId(),
+                           todo.getTitle(),
+                           todo.getContents(),
+                           todo.getWeather(),
+                           new UserResponse(todo.getUser().getId(), todo.getUser().getEmail()),
+                           todo.getCreatedAt(),
+                           todo.getModifiedAt()
+                   ));
+       }
+
+        return todoRepository.findAllByOrderByModifiedAtDesc(pageable)
+              .map(todo -> new TodoResponse(
                 todo.getId(),
                 todo.getTitle(),
                 todo.getContents(),
