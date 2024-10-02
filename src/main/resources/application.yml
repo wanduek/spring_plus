@@ -11,7 +11,7 @@ spring:
   application:
     name: Spring26
   datasource:
-    url: jdbc:mysql://localhost:3306/
+    url: jdbc:mysql://localhost:3306/springplus
     username: root
     password:
 
