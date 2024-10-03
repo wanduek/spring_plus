@@ -40,4 +40,15 @@ public class Todo extends Timestamped {
         this.user = user;
         this.managers.add(new Manager(user, this));
     }
+
+    // toString 메서드에서 연관 엔티티를 참조하지 않도록 하여 지연 로딩으로 인해 발생할 수 있는 문제(무한 루프)를 방지함.
+    @Override
+    public String toString() {
+        return "Todo{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                ", weather='" + weather + '\'' +
+                '}';
+    }
 }
