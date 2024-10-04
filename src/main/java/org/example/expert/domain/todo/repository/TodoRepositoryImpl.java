@@ -1,34 +1,30 @@
 package org.example.expert.domain.todo.repository;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.todo.entity.Todo;
-import org.springframework.stereotype.Repository;
+import org.example.expert.domain.todo.entity.QTodo;
+import org.example.expert.domain.user.entity.QUser;
+
 
 import java.util.Optional;
 
-@Repository
+
+@RequiredArgsConstructor
 public class TodoRepositoryImpl implements TodoRepositoryCustom {
 
-    private final JPAQueryFactory jpaQueryFactory;
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    public TodoRepositoryImpl(JPAQueryFactory queryFactory) {
-        this.QueryFactory = queryFactory;
-    }
+    private final JPAQueryFactory jqf;
 
     @Override
-    public Optional<Todo> findByWithUser(Long todoId) {
+    public Optional<Todo> findByIdWithUser(Long id) {
         QTodo todo = QTodo.todo;
         QUser user = QUser.user;
 
-        Todo result = jpaQueryFactory
+        Todo result = jqf
                 .selectFrom(todo)
                 .leftJoin(todo.user, user)
-                .fetchJoin()
-                .where(todo.id.eq(todoId))
+                .fetchJoin()  // User와 fetch join으로 N+1 문제 방지
+                .where(todo.id.eq(id))
                 .fetchOne();
 
         return Optional.ofNullable(result);
