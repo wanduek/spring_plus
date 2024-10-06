@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TodoSearchResponse {
     private String title;
-    private Long managers;
+    private Long userCounts;
     private Long CommentCounts;
 }
