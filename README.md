@@ -19,6 +19,9 @@
   
 <img width="910" alt="스크린샷 2024-10-09 오후 6 38 31" src="https://github.com/user-attachments/assets/e754a205-d494-44c6-b165-e4cbfe443919">
 
+## S3 버킷 생성
+
+<img width="879" alt="스크린샷 2024-10-09 오후 8 44 26" src="https://github.com/user-attachments/assets/a69d78ef-6996-4209-92d6-b35d9e2fdba2">
 
 
 
