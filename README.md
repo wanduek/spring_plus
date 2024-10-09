@@ -1,4 +1,4 @@
-# SPRING PLUS
+# SPRING PLUS AWS EC2, RDS, S3 설정 캡쳐본
 
 ## EC2
 - 탄력적 ip 사용
