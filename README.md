@@ -8,9 +8,10 @@
 
 
 ## RDS
-- 인스턴스 연결
+- RDS 생성
 ![스크린샷 2024-10-08 오후 8 52 39](https://github.com/user-attachments/assets/1787e319-dc0b-4379-bb67-e886049b1044)
 
+- RDS EC2에 연결
 <img width="910" alt="스크린샷 2024-10-09 오후 6 38 31" src="https://github.com/user-attachments/assets/e754a205-d494-44c6-b165-e4cbfe443919">
 
 
