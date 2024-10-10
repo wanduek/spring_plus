@@ -52,6 +52,9 @@ spring:
       s3:
         bucket: spring-plus-bucket # S3 버킷 이름
 
+```
 
+자세한건해당 
+https://minjooig.tistory.com/143
 
 
