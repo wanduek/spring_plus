@@ -26,6 +26,32 @@
 
 <img width="879" alt="스크린샷 2024-10-09 오후 8 44 26" src="https://github.com/user-attachments/assets/06152430-069d-496d-8d64-66ed477ee1be">
 
+# 트러블 슈팅
+
+# 문제 해결: YAML 설정 문제
+
+## 문제
+![스크린샷 2024-10-10 오후 10 00 06](https://github.com/user-attachments/assets/4b0459b8-87d2-4960-b952-35bf40196325)
+
+이 오류는 애플리케이션이 구성에서 `cloud.aws.s3.bucket` 속성을 찾을 수 없음을 나타냅니다.
+
+## 해결 단계
+
+### 1. YAML 구조 확인
+`application.yml` 파일이 올바르게 구조화되어 있는지 확인하세요. 아래는 예상되는 형식입니다:
+
+```yaml
+spring:
+  cloud:
+    aws:
+      credentials:
+        access-key: access key # AWS IAM Access Key
+        secret-key: secret key # AWS IAM Secret Key
+      region:
+        static: ap-southeast-2 # 예: ap-northeast-2
+      s3:
+        bucket: spring-plus-bucket # S3 버킷 이름
+
 
 
 
