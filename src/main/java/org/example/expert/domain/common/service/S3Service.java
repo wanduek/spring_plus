@@ -1,64 +1,52 @@
 package org.example.expert.domain.common.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import io.jsonwebtoken.io.IOException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
-import software.amazon.awssdk.services.s3.presigner.S3Presigner;
-import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
-import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.net.URL;
-import java.time.Duration;
+import java.io.InputStream;
+import java.util.UUID;
 
 @Service
 public class S3Service {
 
-    private final S3Client s3Client;
-    private final String bucketName;
+    private final AmazonS3 amazonS3;
 
-    public S3Service(
-            @Value("${aws.credentials.accessKey}") String accessKey,
-            @Value("${aws.credentials.secretKey}") String secretKey,
-            @Value("${aws.region}") String region,
-            @Value("${aws.s3.bucket}") String bucketName) {
-
-        this.bucketName = bucketName;
-        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(accessKey, secretKey);
-
-        this.s3Client = S3Client.builder()
-                .region(Region.of(region))
-                .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
-                .build();
+    public S3Service(AmazonS3 amazonS3) {
+        this.amazonS3 = amazonS3;
     }
 
-    public String uploadFile(String key, File file) {
-        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                .bucket(bucketName)
-                .key(key)
-                .build();
+    @Value("${spring.cloud.aws.s3.bucket}")
+    private String bucket;
 
-        PutObjectResponse response = s3Client.putObject(putObjectRequest, software.amazon.awssdk.core.sync.RequestBody.fromFile(file));
-        return response.eTag(); // 업로드가 성공하면 ETag 반환
+    /**
+     * S3에 이미지 업로드 하기
+     */
+    public String uploadImage(MultipartFile image) throws IOException, java.io.IOException {
+        String fileName = UUID.randomUUID() + "_" + image.getOriginalFilename(); // 고유한 파일 이름 생성
+
+        // 메타데이터 설정 (ContentType 추가)
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(image.getContentType());
+        metadata.setContentLength(image.getSize());
+
+        // 이미지 파일의 InputStream 가져오기
+        InputStream inputStream = image.getInputStream();
+
+        // S3에 파일 업로드 (metadata 없이 간단하게 업로드)
+        amazonS3.putObject(bucket, fileName, inputStream, null);
+
+        return getPublicUrl(fileName);
     }
 
-    public URL getPresignedUrl(String key) {
-        S3Presigner presigner = S3Presigner.builder()
-                .region(s3Client.region())
-                .credentialsProvider(s3Client.credentialsProvider())
-                .build();
 
-        GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest.builder()
-                .getObjectRequest(builder -> builder.bucket(bucketName).key(key))
-                .signatureDuration(Duration.ofMinutes(60))
-                .build();
 
-        PresignedGetObjectRequest presignedRequest = presigner.presignGetObject(getObjectPresignRequest);
-        return presignedRequest.url(); // Presigned URL 반환
+    private String getPublicUrl(String fileName) {
+        return String.format("https://%s.s3.%s.amazonaws.com/%s", bucket, amazonS3.getRegionName(), fileName);
     }
 }

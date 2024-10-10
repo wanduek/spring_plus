@@ -8,6 +8,17 @@ server:
       force: true
 
 spring:
+  cloud:
+    aws:
+      credentials:
+        access-key: AKIA6ELKN4MKEZSX7PAA  # AWS IAM의 Access Key
+        secret-key: ZRLeR4FF3BP65FOv01TwDFehG5xLzbEKSDe7Ly7c  # AWS IAM의 Secret Key
+      region:
+        static: ap-southeast-2 # 예: ap-northeast-2
+      s3:
+        bucket: spring-plus-bucket # S3 버킷 이름
+
+
   application:
     name: Spring26
   datasource:
@@ -30,11 +41,4 @@ spring:
 jwt:
   secret.key: 7Iqk7YyM66W07YOA7L2U65Sp7YG065+9U3ByaW5n6rCV7J2Y7Yqc7YSw7LWc7JuQ67mI7J6F64uI64ukLg==
 
-  aws:
-    credentials:
-      accessKey: YOUR_ACCESS_KEY_ID
-      secretKey: YOUR_SECRET_ACCESS_KEY
-    region: ap-southeast-2
-    s3:
-      bucket: spring-plus-bucket
 
