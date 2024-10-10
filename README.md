@@ -9,6 +9,10 @@
 
 ![스크린샷 2024-10-08 오후 4 44 36](https://github.com/user-attachments/assets/6365fd4b-e8fe-4162-aa1b-250037a76a09)
 
+- 배포
+  
+![스크린샷 2024-10-10 오전 10 57 48](https://github.com/user-attachments/assets/7ce2ac1b-dd40-4f1d-bb98-8a2b2fa5bfec)
+  
 ## RDS
 - RDS 생성
 
