@@ -11,8 +11,8 @@ spring:
   cloud:
     aws:
       credentials:
-        access-key: AKIA6ELKN4MKEZSX7PAA  # AWS IAM의 Access Key
-        secret-key: ZRLeR4FF3BP65FOv01TwDFehG5xLzbEKSDe7Ly7c  # AWS IAM의 Secret Key
+        access-key: ${spring.cloud.aws.credentials.access-key} # AWS IAM의 Access Key
+        secret-key: ${spring.cloud.aws.credentials.secret-key}  # AWS IAM의 Secret Key
       region:
         static: ap-southeast-2 # 예: ap-northeast-2
       s3:
