@@ -129,4 +129,18 @@ spring:
 자세한건해당 
 https://minjooig.tistory.com/143
 
+### 2. AWS 보안 문제로 인한 git push reject
+![스크린샷 2024-10-11 오전 12 11 48](https://github.com/user-attachments/assets/083bc7bd-55b5-45ec-bf19-0506843ab363)
+
+- GitHub Push Protection 오류: AWS Access Key 유출
+
+  1.	AWS 콘솔에서 키 삭제 및 재발급
+	- AWS IAM에서 유출된 키를 삭제하고, 새 키를 생성합니다.
+  - 생성된 키는 환경 변수나 AWS Secrets Manager를 사용해 안전하게 관리합니다.
+	2.	코드에서 AWS 키 제거
+	- application.yml 또는 민감한 정보가 포함된 파일에서 키를 삭제합니다.
+	- 민감한 정보는 환경 변수를 사용하여 관리하도록 수정합니다.
+
+
+
 
